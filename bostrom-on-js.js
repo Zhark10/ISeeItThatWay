@@ -53,3 +53,10 @@ async function runSimulation(GodSHiddenThoughts) {
   }
   return statistics;
 }
+
+// 5. WHERE I AM?
+const result = await GodSThoughts.analyze(simulationsInfo);
+const mainAnswer = result.getAnswer('WHERE I AM?');
+
+// 6. THE END.
+console.log(mainAnswer, null, 2);
