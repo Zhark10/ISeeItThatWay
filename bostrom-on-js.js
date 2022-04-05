@@ -23,3 +23,10 @@ const GodSThoughts = {
   analyze: async function () {},
   //...
 };
+
+// 3. DOES THAT MAKE SENSE?
+const startNewSimulations = async ArchitectSThoughts => {
+  const plannedSimulations = ArchitectSThoughts.getPlannedSimulations();
+  await plannedSimulations.map(runSimulation);
+};
+const simulationsInfo = await startNewSimulations(GodSThoughts);
