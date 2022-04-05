@@ -30,3 +30,26 @@ const startNewSimulations = async ArchitectSThoughts => {
   await plannedSimulations.map(runSimulation);
 };
 const simulationsInfo = await startNewSimulations(GodSThoughts);
+
+// 4. HOW THE SIMULATIONS WORKS.
+async function runSimulation(GodSHiddenThoughts) {
+  const statistics = {currentSimulation: null, generatedChildSimulations: null};
+
+  const currentWorld = await createWorld();
+  const generatedPresets = await currentWorld.initialize(GodSHiddenThoughts);
+  const entities = await currentWorld.bigBang(generatedPresets);
+  const output = await currentWorld.toDevelopCivilization(entities);
+  statistics.currentSimulation = output;
+
+  if (output.populationIsBroken) {
+    const selectedDestroyMethod =
+      output.destroyTheWorld || GodSHiddenThoughts.turnOffSimulation;
+    selectedDestroyMethod(currentWorld);
+  } else {
+    const coppiedGodSThoughts = JSON.parse(JSON.stringify(GodSHiddenThoughts));
+    const thoughtsOfTheNewGod = output.rethinking(coppiedGodSThoughts);
+    const childSimulationsInfo = await startNewSimulations(thoughtsOfTheNewGod);
+    statistics.generatedChildSimulations = childSimulationsInfo;
+  }
+  return statistics;
+}
