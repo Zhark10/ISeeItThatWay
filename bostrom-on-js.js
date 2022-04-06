@@ -27,7 +27,7 @@ const GodSThoughts = {
 // 3. DOES THAT MAKE SENSE?
 const startNewSimulations = async ArchitectSThoughts => {
   const plannedSimulations = ArchitectSThoughts.getPlannedSimulations();
-  await plannedSimulations.map(runSimulation);
+  return plannedSimulations.map(runSimulation);
 };
 const simulationsInfo = await startNewSimulations(GodSThoughts);
 
@@ -59,4 +59,4 @@ const result = await GodSThoughts.analyze(simulationsInfo);
 const mainAnswer = result.getAnswer('WHERE I AM?');
 
 // 6. THE END.
-console.log(mainAnswer, null, 2);
+console.log(JSON.stringify(mainAnswer, null, 2));
