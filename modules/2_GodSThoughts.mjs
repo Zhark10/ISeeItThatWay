@@ -15,7 +15,9 @@
       });
       return simulations.map(setInitialSimulationInfo);
     },
-    turnOffSimulation: async function () { },
+    turnOffSimulation: async function (currentWorld) { 
+      currentWorld.isRunned = false
+    },
     analyze: async function (data) { 
       return data
     },

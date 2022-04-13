@@ -6,6 +6,7 @@ export class World {
     this.generatedPresets = {
       ...initialPresets,
     }
+    this.isRunned = true
   };
 
   bigBang = async _generatedPresets => {
