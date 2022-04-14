@@ -1,0 +1,19 @@
+{
+  "name": "iseeitthatway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhark10/ISeeItThatWay.git"
+  },
+  "author": "Zhark10",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zhark10/ISeeItThatWay/issues"
+  },
+  "homepage": "https://github.com/Zhark10/ISeeItThatWay#readme"
+}
