@@ -8,5 +8,11 @@ import {startNewSimulations} from './3_StartNewSimulations.mjs'
   // const mainAnswer = result.getAnswer('WHERE I AM?');
   const formattedResult = JSON.stringify(result, null, 2)
   console.log(result);
-  window.document.write(formattedResult);
+
+  // document.write() after the module has loaded implicitly reopens
+  // the document and can behave unreliably in modern browsers, so the
+  // result is rendered into a <pre> instead.
+  const output = document.createElement('pre');
+  output.textContent = formattedResult;
+  document.body.appendChild(output);
 })()
