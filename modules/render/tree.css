@@ -1,0 +1,245 @@
+:root {
+  --bg: #0b0e1a;
+  --bg-card: #141a2e;
+  --line: #3a4266;
+  --text: #e7e9f5;
+  --text-dim: #9aa2c0;
+  --alive: #4ade80;
+  --broken: #f87171;
+  --accent: #818cf8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% -10%, #1b2242 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  padding: 32px 16px 64px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  letter-spacing: 0.02em;
+}
+
+.page-header .subtitle {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+.forest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: auto;
+  padding-bottom: 24px;
+}
+
+.forest-root {
+  padding: 10px 20px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* --- pure-CSS tree connectors --- */
+.tree,
+.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.tree ul {
+  position: relative;
+  padding-top: 28px;
+}
+
+.tree li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 12px 0;
+}
+
+.tree li::before,
+.tree li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 28px;
+  border-top: 2px solid var(--line);
+}
+
+.tree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 2px solid var(--line);
+}
+
+.tree li:only-child::before,
+.tree li:only-child::after {
+  display: none;
+}
+
+.tree li:only-child {
+  padding-top: 0;
+}
+
+.tree li:first-child::before,
+.tree li:last-child::after {
+  border: 0 none;
+}
+
+.tree li:last-child::before {
+  border-right: 2px solid var(--line);
+  border-radius: 0 6px 0 0;
+}
+
+.tree li:first-child::after {
+  border-radius: 6px 0 0 0;
+}
+
+.tree > li {
+  padding-top: 0;
+}
+
+.tree > li::before,
+.tree > li::after {
+  display: none;
+}
+
+.tree ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 28px;
+  border-left: 2px solid var(--line);
+}
+
+/* --- node card --- */
+.node {
+  width: 220px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease;
+}
+
+.node:hover {
+  transform: translateY(-2px);
+}
+
+.node.is-alive {
+  border-color: var(--alive);
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.15), 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.node.is-broken {
+  border-color: var(--broken);
+  opacity: 0.75;
+}
+
+.node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.node-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.node-badge {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.is-alive .node-badge {
+  color: var(--alive);
+  background: rgba(74, 222, 128, 0.12);
+}
+
+.is-broken .node-badge {
+  color: var(--broken);
+  background: rgba(248, 113, 113, 0.12);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.stat-row strong {
+  color: var(--text);
+  font-size: 0.8rem;
+}
+
+.stat-row.risk strong {
+  color: var(--broken);
+}
+
+.stat-row strong.positive {
+  color: var(--alive);
+}
+
+.stat-row strong.negative {
+  color: var(--broken);
+}
+
+.stat {
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.stat-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+}

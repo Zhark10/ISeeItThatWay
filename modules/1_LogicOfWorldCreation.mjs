@@ -1,4 +1,5 @@
 import { initialPresets } from "../configs/constants.mjs"
+import { Population } from "./entities/Population.mjs"
 
 // 1. UNKNOWN LOGIC OF WORLD CREATION.
 export class World {
@@ -10,13 +11,15 @@ export class World {
   };
 
   bigBang = async _generatedPresets => {
-    const entities = null
+    const entities = { population: new Population() }
     return entities
   }
 
   toDevelopCivilization = async _entities => {
+    const { population } = _entities
     const output = {
-      populationIsBroken: Boolean(Math.round(Math.random())),
+      population,
+      populationIsBroken: population.rollIsBroken(),
       destroyTheWorld: null,
       rethinking: async _thoughts => _thoughts,
     }
