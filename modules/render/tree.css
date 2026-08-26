@@ -140,7 +140,7 @@ body {
 
 /* --- node card --- */
 .node {
-  width: 220px;
+  width: 248px;
   background: var(--bg-card);
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -193,53 +193,41 @@ body {
   background: rgba(248, 113, 113, 0.12);
 }
 
-.stat-row {
+.organism-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #0f1428 0%, #090c18 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  margin-bottom: 8px;
+  line-height: 0;
+}
+
+.organism-field {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.node-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  margin-bottom: 6px;
-}
-
-.stat-row strong {
-  color: var(--text);
-  font-size: 0.8rem;
-}
-
-.stat-row.risk strong {
-  color: var(--broken);
-}
-
-.stat-row strong.positive {
-  color: var(--alive);
-}
-
-.stat-row strong.negative {
-  color: var(--broken);
-}
-
-.stat {
-  margin-bottom: 6px;
-}
-
-.stat-label {
-  display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-size: 0.72rem;
   color: var(--text-dim);
-  margin-bottom: 2px;
 }
 
-.stat-track {
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
+/* --- legend --- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  max-width: 640px;
+  margin: 14px auto 0;
+  font-size: 0.75rem;
+  color: var(--text-dim);
 }
 
-.stat-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 999px;
+.legend span strong {
+  color: var(--text);
+  font-weight: 600;
 }

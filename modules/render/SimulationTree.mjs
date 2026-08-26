@@ -1,23 +1,16 @@
 // ISOLATED RENDERER: turns the statistics tree produced by the simulation
 // (currentSimulation / generatedChildSimulations) into a DOM tree. Knows
-// nothing about how a world runs — it only reads the finished output.
+// nothing about how a world runs — it only reads the finished output and
+// hands each population off to OrganismField for the actual visual.
+
+import { OrganismField } from "./OrganismField.mjs";
+import { registerField, ensureLoopStarted } from "./animationLoop.mjs";
 
 const formatSize = n => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
   return String(n);
 };
-
-const formatPercent = n => `${Math.round(n * 100)}%`;
-
-const formatSignedPercent = n => `${n >= 0 ? "+" : ""}${(n * 100).toFixed(1)}%`;
-
-const statBar = (label, value) => `
-  <div class="stat">
-    <div class="stat-label"><span>${label}</span><span>${formatPercent(value)}</span></div>
-    <div class="stat-track"><div class="stat-fill" style="width:${Math.round(value * 100)}%"></div></div>
-  </div>
-`;
 
 const renderNode = simulationStat => {
   const { currentSimulation, generatedChildSimulations } = simulationStat;
@@ -27,29 +20,27 @@ const renderNode = simulationStat => {
 
   const card = document.createElement("div");
   card.className = `node ${populationIsBroken ? "is-broken" : "is-alive"}`;
-  card.innerHTML = `
-    <div class="node-header">
-      <span class="node-title">Мир №${population.id}</span>
-      <span class="node-badge">${populationIsBroken ? "☠ разрушен" : "✓ жив"}</span>
-    </div>
-    <div class="node-body">
-      <div class="stat-row">
-        <span>Популяция</span>
-        <strong>${formatSize(population.size)}</strong>
-      </div>
-      <div class="stat-row">
-        <span>Рост</span>
-        <strong class="${population.growthRate >= 0 ? "positive" : "negative"}">${formatSignedPercent(population.growthRate)}</strong>
-      </div>
-      ${statBar("Ресурсы", population.resourceStability)}
-      ${statBar("Технологии", population.technologyLevel)}
-      ${statBar("Сплочённость", population.cohesion)}
-      <div class="stat-row risk">
-        <span>Риск краха</span>
-        <strong>${formatPercent(population.collapseRisk)}</strong>
-      </div>
-    </div>
+
+  const header = document.createElement("div");
+  header.className = "node-header";
+  header.innerHTML = `
+    <span class="node-title">Мир №${population.id}</span>
+    <span class="node-badge">${populationIsBroken ? "☠ вымирает" : "✓ живёт"}</span>
   `;
+  card.appendChild(header);
+
+  const canvasWrap = document.createElement("div");
+  canvasWrap.className = "organism-wrap";
+  const field = new OrganismField(population, populationIsBroken);
+  canvasWrap.appendChild(field.canvas);
+  registerField(field);
+  card.appendChild(canvasWrap);
+
+  const footer = document.createElement("div");
+  footer.className = "node-footer";
+  footer.innerHTML = `<span>${formatSize(population.size)} особей</span>`;
+  card.appendChild(footer);
+
   li.appendChild(card);
 
   if (Array.isArray(generatedChildSimulations) && generatedChildSimulations.length > 0) {
@@ -78,4 +69,5 @@ export const renderSimulationForest = (simulationsInfo, container) => {
   forest.appendChild(tree);
 
   container.appendChild(forest);
+  ensureLoopStarted();
 };
