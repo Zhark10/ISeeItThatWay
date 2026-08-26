@@ -17,11 +17,18 @@ const quasiRandom = (samples = 3) => {
 const quasiRandomInRange = (min, max, samples = 3) =>
   min + quasiRandom(samples) * (max - min);
 
+// A population's "species" isn't a cosmetic label — it's picked once at
+// creation and determines how its organisms move and relate to each other
+// (see OrganismField), so every world's population is behaviorally its own
+// rather than a recolored copy of the same flocking rule.
+export const SPECIES = ["clusterers", "orbiters", "wanderers", "pulsers"];
+
 let nextPopulationId = 1;
 
 export class Population {
   constructor() {
     this.id = nextPopulationId++;
+    this.species = SPECIES[Math.floor(Math.random() * SPECIES.length)];
     this.size = Math.round(quasiRandomInRange(1_000, 10_000_000, 4));
     this.growthRate = quasiRandomInRange(-0.05, 0.05);
     this.resourceStability = quasiRandomInRange(0, 1);

@@ -1,10 +1,8 @@
 // ISOLATED RENDERER: turns the statistics tree produced by the simulation
-// (currentSimulation / generatedChildSimulations) into a DOM tree. Knows
-// nothing about how a world runs — it only reads the finished output and
-// hands each population off to OrganismField for the actual visual.
-
-import { OrganismField } from "./OrganismField.mjs";
-import { registerField, ensureLoopStarted } from "./animationLoop.mjs";
+// (currentSimulation / generatedChildSimulations) into a compact DOM tree.
+// Knows nothing about how a world runs or how a selected simulation gets
+// displayed in detail — it only reads the finished output and reports which
+// node was clicked via onSelect.
 
 const formatSize = n => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
@@ -12,47 +10,46 @@ const formatSize = n => {
   return String(n);
 };
 
-const renderNode = simulationStat => {
+const renderNode = (simulationStat, onSelect, state) => {
   const { currentSimulation, generatedChildSimulations } = simulationStat;
   const { population, populationIsBroken } = currentSimulation;
 
   const li = document.createElement("li");
 
-  const card = document.createElement("div");
-  card.className = `node ${populationIsBroken ? "is-broken" : "is-alive"}`;
-
-  const header = document.createElement("div");
-  header.className = "node-header";
-  header.innerHTML = `
-    <span class="node-title">Мир №${population.id}</span>
-    <span class="node-badge">${populationIsBroken ? "☠ вымирает" : "✓ живёт"}</span>
+  const chip = document.createElement("button");
+  chip.type = "button";
+  chip.className = `node ${populationIsBroken ? "is-broken" : "is-alive"}`;
+  chip.innerHTML = `
+    <span class="node-dot" style="background:${populationIsBroken ? "var(--broken)" : "var(--alive)"}"></span>
+    <span class="node-title">№${population.id}</span>
+    <span class="node-size">${formatSize(population.size)}</span>
   `;
-  card.appendChild(header);
+  chip.addEventListener("click", () => {
+    if (state.selectedEl) state.selectedEl.classList.remove("is-selected");
+    chip.classList.add("is-selected");
+    state.selectedEl = chip;
+    onSelect(currentSimulation);
+  });
 
-  const canvasWrap = document.createElement("div");
-  canvasWrap.className = "organism-wrap";
-  const field = new OrganismField(population, populationIsBroken);
-  canvasWrap.appendChild(field.canvas);
-  registerField(field);
-  card.appendChild(canvasWrap);
+  if (state.autoSelect) {
+    state.autoSelect = false;
+    state.selectedEl = chip;
+    chip.classList.add("is-selected");
+    onSelect(currentSimulation);
+  }
 
-  const footer = document.createElement("div");
-  footer.className = "node-footer";
-  footer.innerHTML = `<span>${formatSize(population.size)} особей</span>`;
-  card.appendChild(footer);
-
-  li.appendChild(card);
+  li.appendChild(chip);
 
   if (Array.isArray(generatedChildSimulations) && generatedChildSimulations.length > 0) {
     const ul = document.createElement("ul");
-    generatedChildSimulations.forEach(child => ul.appendChild(renderNode(child)));
+    generatedChildSimulations.forEach(child => ul.appendChild(renderNode(child, onSelect, state)));
     li.appendChild(ul);
   }
 
   return li;
 };
 
-export const renderSimulationForest = (simulationsInfo, container) => {
+export const renderSimulationForest = (simulationsInfo, container, onSelect) => {
   container.innerHTML = "";
 
   const forest = document.createElement("div");
@@ -65,9 +62,9 @@ export const renderSimulationForest = (simulationsInfo, container) => {
 
   const tree = document.createElement("ul");
   tree.className = "tree";
-  simulationsInfo.forEach(sim => tree.appendChild(renderNode(sim)));
+  const state = { selectedEl: null, autoSelect: true };
+  simulationsInfo.forEach(sim => tree.appendChild(renderNode(sim, onSelect, state)));
   forest.appendChild(tree);
 
   container.appendChild(forest);
-  ensureLoopStarted();
 };

@@ -10,15 +10,18 @@
 <body>
   <header class="page-header">
     <h1>Дерево симуляций</h1>
-    <p class="subtitle">Каждая карточка — живая популяция одного мира</p>
+    <p class="subtitle">Выберите мир в дереве, чтобы увидеть его популяцию живьём</p>
     <p class="legend">
-      <span><strong>Количество точек</strong> — размер популяции</span>
+      <span><strong>Количество организмов</strong> — размер популяции</span>
+      <span><strong>Вид организма</strong> — уникальное поведение мира</span>
       <span><strong>Цвет и скорость</strong> — уровень технологий</span>
-      <span><strong>Скученность / линии</strong> — сплочённость</span>
       <span><strong>Дрожание</strong> — нестабильность ресурсов</span>
       <span><strong>Красный и рассеивание</strong> — мир разрушен</span>
     </p>
   </header>
-  <main id="app"></main>
+  <main>
+    <section id="detail" class="detail"></section>
+    <section id="tree" class="tree-section"></section>
+  </main>
 </body>
 </html>
